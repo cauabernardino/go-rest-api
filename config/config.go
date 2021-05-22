@@ -21,8 +21,10 @@ var (
 )
 
 // LoadEnvs will initialize the environment variables for the application.
-// Use "test" for loading test/dev environment
+// Use "test" for loading test environment
 // 	LoadEnvs("test")
+// Use "dev" for loading development environment
+// 	LoadEnvs("dev")
 // And "prod for loading prod ready environment
 // 	LoadEnvs("prod")
 func LoadEnvs(arg string) {
@@ -32,6 +34,8 @@ func LoadEnvs(arg string) {
 	switch arg {
 	case "test":
 		env = "../.env.dev"
+	case "dev":
+		env = ".env.dev"
 	case "prod":
 		env = ".env"
 	default:
