@@ -56,6 +56,19 @@ func TestGetProduct(t *testing.T) {
 	})
 }
 
-// func TestListProducts(t *testing.T) {
+func TestListProducts(t *testing.T) {
+	repo := NewProductInstance(testDB)
 
-// })
+	n := 5
+	for i := 0; i < n; i++ {
+		createRandomProduct(t)
+	}
+
+	t.Run("should get all products in database", func(t *testing.T) {
+
+		users, err := repo.ListAll()
+		require.NoError(t, err)
+		require.NotEmpty(t, users)
+		require.GreaterOrEqual(t, len(users), n)
+	})
+}

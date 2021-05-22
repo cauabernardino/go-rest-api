@@ -55,7 +55,31 @@ func (p Products) GetByID(productID string) (models.Product, error) {
 	return product, nil
 }
 
-// // ListAll lists all products in database
-// func (p Products) ListAll() ([]models.Product, error) {
+// ListAll lists all products in database
+func (p Products) ListAll() ([]models.Product, error) {
+	rows, err := p.dbInstance.Query(
+		"SELECT * FROM products ORDER BY created_at DESC;",
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-// }
+	var products []models.Product
+	for rows.Next() {
+		var product models.Product
+		if err := rows.Scan(
+			&product.ID,
+			&product.Name,
+			&product.Price,
+			&product.Description,
+			&product.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+
+		products = append(products, product)
+	}
+
+	return products, nil
+}
