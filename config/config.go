@@ -20,14 +20,22 @@ var (
 	API_PORT = 0
 )
 
-// LoadEnvs will initialize the environment variables for the application
+// LoadEnvs will initialize the environment variables for the application.
+// Use "test" for loading test/dev environment
+// 	LoadEnvs("test")
+// And "prod for loading prod ready environment
+// 	LoadEnvs("prod")
 func LoadEnvs(arg string) {
 
 	var env string
-	if arg == "test" {
-		env = ".env.dev"
-	} else {
+
+	switch arg {
+	case "test":
+		env = "../.env.dev"
+	case "prod":
 		env = ".env"
+	default:
+		log.Fatal("unknown environment")
 	}
 
 	// Load .env file
