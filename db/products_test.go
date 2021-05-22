@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"testing"
 
 	"github.com/cauabernardino/go-rest-api/models"
@@ -105,4 +106,20 @@ func TestUpdateProduct(t *testing.T) {
 		_, err := repo.UpdateProduct(product.ID, newProduct)
 		require.NotEmpty(t, err)
 	})
+}
+
+func TestDeleteProduct(t *testing.T) {
+	product := createRandomProduct(t)
+
+	t.Run("should be able to delete a product", func(t *testing.T) {
+		repo := NewProductInstance(testDB)
+
+		err := repo.DeleteProduct(product.ID)
+		require.NoError(t, err)
+
+		checkProduct, err := repo.GetByID(product.ID)
+		require.Empty(t, checkProduct)
+		require.Equal(t, sql.ErrNoRows, err)
+	})
+
 }

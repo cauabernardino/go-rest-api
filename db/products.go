@@ -105,3 +105,19 @@ func (p Products) UpdateProduct(productID string, product *models.Product) (stri
 
 	return product.ID, err
 }
+
+// DeleteProduct deletes a product by its ID
+func (p Products) DeleteProduct(productID string) error {
+
+	query, err := p.dbInstance.Prepare("DELETE FROM products WHERE id = $1;")
+	if err != nil {
+		return err
+	}
+	defer query.Close()
+
+	if _, err = query.Exec(productID); err != nil {
+		return err
+	}
+
+	return nil
+}

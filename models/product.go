@@ -20,6 +20,7 @@ func (product *Product) Prepare() error {
 	if product.Name == "" {
 		return errors.New("name is required")
 	}
+
 	if product.Description == "" {
 		return errors.New("description is required")
 	}
