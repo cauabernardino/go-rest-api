@@ -22,4 +22,7 @@ testdbup: postgres migrateup
 testdbdown:
 	docker rm go_api_db -f
 
-.PHONY: createmigration postgres migrateup migratedown testdbup testdbdown
+test: testdbup
+	go test ./... -v
+
+.PHONY: createmigration postgres migrateup migratedown testdbup testdbdown test

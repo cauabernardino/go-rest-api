@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/cauabernardino/go-rest-api/models"
@@ -17,11 +16,7 @@ func createRandomProduct(t *testing.T) *models.Product {
 		Description: utils.RandomDescription(),
 	}
 
-	db, err := Connect()
-	require.NoError(t, err)
-	defer db.Close()
-
-	repo := NewProductInstance(db)
+	repo := NewProductInstance(testDB)
 
 	lastID, err := repo.Create(product)
 	require.NoError(t, err)
@@ -34,12 +29,9 @@ func TestCreateProduct(t *testing.T) {
 	// Should be able to create a Product
 	createRandomProduct(t)
 
-	db, err := Connect()
-	require.NoError(t, err)
-	defer db.Close()
-	repo := NewProductInstance(db)
-
 	// Should fail for err != nil
+	repo := NewProductInstance(testDB)
+
 	product := &models.Product{}
 
 	lastID, err := repo.Create(product)
@@ -52,16 +44,11 @@ func TestGetProduct(t *testing.T) {
 	// Create product
 	newProduct := createRandomProduct(t)
 
-	db, err := Connect()
-	require.NoError(t, err)
-	defer db.Close()
-
-	repo := NewProductInstance(db)
+	repo := NewProductInstance(testDB)
 
 	// Get product in database
 	expectedProduct, err := repo.GetByID(newProduct.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, expectedProduct)
 
-	fmt.Println(expectedProduct)
 }

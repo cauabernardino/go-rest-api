@@ -54,3 +54,8 @@ func (p Products) GetByID(productID string) (models.Product, error) {
 
 	return product, nil
 }
+
+// // ListAll lists all products in database
+// func (p Products) ListAll() ([]models.Product, error) {
+
+// }
