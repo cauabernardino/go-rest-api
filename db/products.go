@@ -83,3 +83,25 @@ func (p Products) ListAll() ([]models.Product, error) {
 
 	return products, nil
 }
+
+// UpdateProduct updates a single product by its ID
+func (p Products) UpdateProduct(productID string, product *models.Product) (string, error) {
+
+	if err := product.Prepare(); err != nil {
+		return "", err
+	}
+
+	err := p.dbInstance.QueryRow(
+		"UPDATE products SET name=$1, price=$2, description=$3 WHERE id=$4 RETURNING id;",
+		product.Name,
+		product.Price,
+		product.Description,
+		productID,
+	).Scan(&product.ID)
+
+	if err == sql.ErrNoRows {
+		return "", err
+	}
+
+	return product.ID, err
+}

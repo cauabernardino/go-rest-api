@@ -1,6 +1,7 @@
 package db
 
 import (
+	"log"
 	"testing"
 
 	"github.com/cauabernardino/go-rest-api/models"
@@ -70,5 +71,32 @@ func TestListProducts(t *testing.T) {
 		require.NoError(t, err)
 		require.NotEmpty(t, users)
 		require.GreaterOrEqual(t, len(users), n)
+	})
+}
+
+func TestUpdateProduct(t *testing.T) {
+	// Creation of guide product
+	product := createRandomProduct(t)
+
+	t.Run("should update the product", func(t *testing.T) {
+		repo := NewProductInstance(testDB)
+
+		// Values to update
+		newProduct := &models.Product{
+			Name:        utils.RandomName(),
+			Price:       utils.RandomPrice(),
+			Description: utils.RandomDescription(),
+		}
+
+		updatedProductID, err := repo.UpdateProduct(product.ID, newProduct)
+		require.NoError(t, err)
+		require.Equal(t, product.ID, updatedProductID)
+
+		expectedProduct, _ := repo.GetByID(product.ID)
+		require.Equal(t, newProduct.Name, expectedProduct.Name)
+		require.Equal(t, newProduct.Price, expectedProduct.Price)
+		require.Equal(t, newProduct.Description, expectedProduct.Description)
+		log.Println(newProduct)
+		log.Println(expectedProduct)
 	})
 }
