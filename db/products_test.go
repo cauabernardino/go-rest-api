@@ -1,7 +1,6 @@
 package db
 
 import (
-	"log"
 	"testing"
 
 	"github.com/cauabernardino/go-rest-api/models"
@@ -47,9 +46,10 @@ func TestCreateProduct(t *testing.T) {
 func TestGetProduct(t *testing.T) {
 	// Create product
 	newProduct := createRandomProduct(t)
-	repo := NewProductInstance(testDB)
 
 	t.Run("should get a product in database", func(t *testing.T) {
+		repo := NewProductInstance(testDB)
+
 		expectedProduct, err := repo.GetByID(newProduct.ID)
 		require.NoError(t, err)
 		require.NotEmpty(t, expectedProduct)
@@ -96,7 +96,13 @@ func TestUpdateProduct(t *testing.T) {
 		require.Equal(t, newProduct.Name, expectedProduct.Name)
 		require.Equal(t, newProduct.Price, expectedProduct.Price)
 		require.Equal(t, newProduct.Description, expectedProduct.Description)
-		log.Println(newProduct)
-		log.Println(expectedProduct)
+	})
+
+	t.Run("should fail if new parameters are not valid", func(t *testing.T) {
+		repo := NewProductInstance(testDB)
+
+		newProduct := &models.Product{}
+		_, err := repo.UpdateProduct(product.ID, newProduct)
+		require.NotEmpty(t, err)
 	})
 }
