@@ -26,29 +26,36 @@ func createRandomProduct(t *testing.T) *models.Product {
 }
 
 func TestCreateProduct(t *testing.T) {
-	// Should be able to create a Product
-	createRandomProduct(t)
 
-	// Should fail for err != nil
-	repo := NewProductInstance(testDB)
+	t.Run("should be able to create a Product", func(t *testing.T) {
+		createRandomProduct(t)
+	})
 
-	product := &models.Product{}
+	t.Run("should fail for err != nil", func(t *testing.T) {
+		repo := NewProductInstance(testDB)
 
-	lastID, err := repo.Create(product)
-	require.NotEmpty(t, err)
-	require.Equal(t, lastID, "")
+		product := &models.Product{}
 
+		lastID, err := repo.Create(product)
+		require.NotEmpty(t, err)
+		require.Equal(t, lastID, "")
+
+	})
 }
 
 func TestGetProduct(t *testing.T) {
 	// Create product
 	newProduct := createRandomProduct(t)
-
 	repo := NewProductInstance(testDB)
 
-	// Get product in database
-	expectedProduct, err := repo.GetByID(newProduct.ID)
-	require.NoError(t, err)
-	require.NotEmpty(t, expectedProduct)
+	t.Run("should get a product in database", func(t *testing.T) {
+		expectedProduct, err := repo.GetByID(newProduct.ID)
+		require.NoError(t, err)
+		require.NotEmpty(t, expectedProduct)
 
+	})
 }
+
+// func TestListProducts(t *testing.T) {
+
+// })
