@@ -1,10 +1,16 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
 )
+
+// IHandlers serves as interface for the API handlers
+type IHandlers struct {
+	db *sql.DB
+}
 
 // ReturnJSON returns a JSON response for the request
 func ReturnJSON(w http.ResponseWriter, statusCode int, data interface{}) {

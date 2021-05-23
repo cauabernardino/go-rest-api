@@ -17,24 +17,24 @@ func NewProductInstance(db *sql.DB) *Products {
 }
 
 // Create creates an item in Database
-func (p Products) Create(product *models.Product) (string, error) {
+func (p Products) Create(product *models.Product) error {
 
 	if err := product.Prepare(); err != nil {
-		return "", err
+		return err
 	}
 
 	err := p.dbInstance.QueryRow(
-		"INSERT INTO products (name, price, description) VALUES ($1, $2, $3) RETURNING id;",
+		"INSERT INTO products (name, price, description) VALUES ($1, $2, $3) RETURNING id, created_at;",
 		product.Name,
 		product.Price,
 		product.Description,
-	).Scan(&product.ID)
+	).Scan(&product.ID, &product.CreatedAt)
 
 	if err == sql.ErrNoRows {
-		return "", err
+		return err
 	}
 
-	return product.ID, nil
+	return nil
 }
 
 // GetByID gets an product in database by its ID

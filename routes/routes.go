@@ -1,33 +1,20 @@
 package routes
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/cauabernardino/go-rest-api/handlers"
 	"github.com/gorilla/mux"
 )
 
-type Route struct {
-	URI     string
-	Method  string
-	Handler func(http.ResponseWriter, *http.Request)
-}
-
 // Configure handles the configuration of the endpoints of the API
-func Configure(r *mux.Router) *mux.Router {
-	routes := productRoutes
+func Configure(r *mux.Router, db *sql.DB) *mux.Router {
 
-	for _, route := range routes {
-		r.HandleFunc(route.URI, route.Handler).Methods(route.Method)
-	}
+	productHandlers := handlers.NewProductHandlers(db)
+
+	r.HandleFunc("/products", productHandlers.GetProducts).Methods(http.MethodGet)
+	r.HandleFunc("/products", productHandlers.CreateProduct).Methods(http.MethodPost)
 
 	return r
-}
-
-var productRoutes = []Route{
-	{
-		URI:     "/products",
-		Method:  http.MethodGet,
-		Handler: handlers.GetProducts,
-	},
 }

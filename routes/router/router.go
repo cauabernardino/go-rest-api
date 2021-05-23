@@ -1,6 +1,7 @@
 package router
 
 import (
+	"database/sql"
 	"net/http"
 	"os"
 
@@ -10,13 +11,13 @@ import (
 )
 
 // GenerateRouter handles the creation of the router
-func GenerateRouter() *mux.Router {
+func GenerateRouter(db *sql.DB) *mux.Router {
 	r := mux.NewRouter()
 
-	return routes.Configure(r)
+	return routes.Configure(r, db)
 }
 
-// GenerateLoggingRouter handles the creation of a loggin router
+// GenerateLoggingRouter handles the creation of a logging router
 func GenerateLoggingRouter(r *mux.Router) http.Handler {
 
 	loggingRouter := gorilla_handlers.LoggingHandler(os.Stdout, r)

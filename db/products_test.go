@@ -19,9 +19,8 @@ func createRandomProduct(t *testing.T) *models.Product {
 
 	repo := NewProductInstance(testDB)
 
-	lastID, err := repo.Create(product)
+	err := repo.Create(product)
 	require.NoError(t, err)
-	require.NotEmpty(t, lastID)
 
 	return product
 }
@@ -37,9 +36,8 @@ func TestCreateProduct(t *testing.T) {
 
 		product := &models.Product{}
 
-		lastID, err := repo.Create(product)
+		err := repo.Create(product)
 		require.NotEmpty(t, err)
-		require.Equal(t, lastID, "")
 
 	})
 }
