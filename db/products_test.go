@@ -21,6 +21,7 @@ func createRandomProduct(t *testing.T) *models.Product {
 
 	err := repo.Create(product)
 	require.NoError(t, err)
+	require.NotEmpty(t, product)
 
 	return product
 }

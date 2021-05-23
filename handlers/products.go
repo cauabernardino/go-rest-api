@@ -8,6 +8,7 @@ import (
 
 	"github.com/cauabernardino/go-rest-api/db"
 	"github.com/cauabernardino/go-rest-api/models"
+	"github.com/gorilla/mux"
 )
 
 // NewProductHandlers creates a instance for connecting
@@ -53,4 +54,19 @@ func (p IHandlers) CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	ReturnJSON(w, http.StatusCreated, product)
 
+}
+
+// GetProduct is the handler for getting one product by its ID
+func (p IHandlers) GetProduct(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+
+	repo := db.NewProductInstance(p.db)
+
+	product, err := repo.GetByID(params["productID"])
+	if err != nil {
+		ReturnError(w, http.StatusNotFound, err)
+	}
+
+	ReturnJSON(w, http.StatusOK, product)
 }

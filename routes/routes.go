@@ -15,6 +15,7 @@ func Configure(r *mux.Router, db *sql.DB) *mux.Router {
 
 	r.HandleFunc("/products", productHandlers.GetProducts).Methods(http.MethodGet)
 	r.HandleFunc("/products", productHandlers.CreateProduct).Methods(http.MethodPost)
+	r.HandleFunc("/products/{productID}", productHandlers.GetProduct).Methods(http.MethodGet)
 
 	return r
 }
