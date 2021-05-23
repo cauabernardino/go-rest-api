@@ -22,7 +22,7 @@ func main() {
 	defer db.Close()
 
 	handlers.DB = db
-	router := routes.Generate()
+	router := routes.GenerateRouter()
 
 	log.Printf("Listening of port %d...", config.API_PORT)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.API_PORT), router))

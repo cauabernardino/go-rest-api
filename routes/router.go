@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Generate handles the creation of the router
-func Generate() http.Handler {
+// GenerateRouter handles the creation of the router
+func GenerateRouter() http.Handler {
 	r := mux.NewRouter()
 
 	return configure(r)
