@@ -33,9 +33,9 @@ func LoadEnvs(arg string) {
 
 	switch arg {
 	case "testPackage":
-		env = "../.env.dev"
+		env = "../.env.test"
 	case "testMain":
-		env = ".env.dev"
+		env = ".env.test"
 	case "dev":
 		env = ".env.dev"
 	case "prod":

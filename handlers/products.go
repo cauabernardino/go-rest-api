@@ -45,11 +45,6 @@ func (p IHandlers) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = product.Prepare(); err != nil {
-		ReturnError(w, http.StatusBadRequest, err)
-		return
-	}
-
 	repo := db.NewProductInstance(p.db)
 	err = repo.Create(&product)
 	if err != nil {
