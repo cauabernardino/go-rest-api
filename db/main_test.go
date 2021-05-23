@@ -14,7 +14,7 @@ var testDB *sql.DB
 
 func TestMain(m *testing.M) {
 
-	config.LoadEnvs("test")
+	config.LoadEnvs("testPackage")
 
 	var err error
 	testDB, err = Connect()
