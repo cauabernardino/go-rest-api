@@ -50,6 +50,7 @@ func (p IHandlers) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	err = repo.Create(&product)
 	if err != nil {
 		ReturnError(w, http.StatusInternalServerError, err)
+		return
 	}
 
 	ReturnJSON(w, http.StatusCreated, product)
@@ -66,6 +67,34 @@ func (p IHandlers) GetProduct(w http.ResponseWriter, r *http.Request) {
 	product, err := repo.GetByID(params["productID"])
 	if err != nil {
 		ReturnError(w, http.StatusNotFound, err)
+		return
+	}
+
+	ReturnJSON(w, http.StatusOK, product)
+}
+
+// UpdateProduct is the handler for updating one product
+func (p IHandlers) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		ReturnError(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	var product models.Product
+	if err = json.Unmarshal(reqBody, &product); err != nil {
+		ReturnError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	repo := db.NewProductInstance(p.db)
+	_, err = repo.UpdateProduct(params["productID"], &product)
+	if err != nil {
+		ReturnError(w, http.StatusInternalServerError, err)
+		return
 	}
 
 	ReturnJSON(w, http.StatusOK, product)

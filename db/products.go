@@ -92,12 +92,12 @@ func (p Products) UpdateProduct(productID string, product *models.Product) (stri
 	}
 
 	err := p.dbInstance.QueryRow(
-		"UPDATE products SET name=$1, price=$2, description=$3 WHERE id=$4 RETURNING id;",
+		"UPDATE products SET name=$1, price=$2, description=$3 WHERE id=$4 RETURNING id, created_at;",
 		product.Name,
 		product.Price,
 		product.Description,
 		productID,
-	).Scan(&product.ID)
+	).Scan(&product.ID, &product.CreatedAt)
 
 	if err == sql.ErrNoRows {
 		return "", err
