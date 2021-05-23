@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/cauabernardino/go-rest-api/models"
 )
@@ -115,8 +116,14 @@ func (p Products) DeleteProduct(productID string) error {
 	}
 	defer query.Close()
 
-	if _, err = query.Exec(productID); err != nil {
+	result, err := query.Exec(productID)
+	if err != nil {
 		return err
+	}
+
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return errors.New("no product with this id")
 	}
 
 	return nil

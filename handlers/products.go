@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -66,7 +67,7 @@ func (p IHandlers) GetProduct(w http.ResponseWriter, r *http.Request) {
 
 	product, err := repo.GetByID(params["productID"])
 	if err != nil {
-		ReturnError(w, http.StatusNotFound, err)
+		ReturnError(w, http.StatusNotFound, errors.New("no products found"))
 		return
 	}
 
@@ -93,9 +94,23 @@ func (p IHandlers) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	repo := db.NewProductInstance(p.db)
 	_, err = repo.UpdateProduct(params["productID"], &product)
 	if err != nil {
-		ReturnError(w, http.StatusInternalServerError, err)
+		ReturnError(w, http.StatusNotFound, errors.New("no products found"))
 		return
 	}
 
 	ReturnJSON(w, http.StatusOK, product)
+}
+
+// DeleteProduct is the handler for deleting a product by its ID
+func (p IHandlers) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	repo := db.NewProductInstance(p.db)
+
+	if err := repo.DeleteProduct(params["productID"]); err != nil {
+		ReturnError(w, http.StatusNotFound, err)
+		return
+	}
+
+	ReturnJSON(w, http.StatusNoContent, nil)
 }
